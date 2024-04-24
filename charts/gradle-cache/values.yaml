@@ -1,0 +1,139 @@
+image:
+  # image.repository -- image repository
+  repository: gradle/build-cache-node
+  # image.tag -- image tag (chart's appVersion value will be used if not set)
+  tag: ""
+  # image.pullPolicy -- image pull policy
+  pullPolicy: IfNotPresent
+
+initContainer:
+  image:
+    # initContainer.image.repository -- image repository for initContainer
+    repository: busybox
+    # initContainer.image.tag -- image tag for initContainer
+    tag: "1.33.0"
+
+# imagePullSecrets -- image pull secret for private images
+imagePullSecrets: []
+# nameOverride -- override name of the chart
+nameOverride: ""
+# fullnameOverride -- full name of the chart.
+fullnameOverride: ""
+
+configSecret:
+  # configSecret.create -- specifies whether a secret should be created
+  create: true
+  # configSecret.name -- the name of the secret to use; if not set and create is true, a name is generated using the fullname template
+  name:
+  # configSecret.content - content of 'config.yaml'
+  content: |-
+    version: 4
+    cache:
+      accessControl:
+        anonymousLevel: readwrite
+      maxEntryAgeInHours: null
+      freeSpaceBufferSize: 1024
+      maxArtifactSize: 100
+      targetSize:
+        type: fixed
+        size: 10000
+    uiAccess:
+      type: open
+
+# args -- args to pass to the container
+args:
+  - start
+  - --no-warn-anon-cache-write
+  - --no-warn-anon-ui-access
+
+serviceAccount:
+  # serviceAccount.create -- specifies whether a service account should be created
+  create: false
+  # serviceAccount.annotations -- annotations to add to the service account
+  annotations: {}
+  # serviceAccount.name -- the name of the service account to use; if not set and create is true, a name is generated using the fullname template
+  name:
+
+# podSecurityContext -- specifies security settings for a pod
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# securityContext -- specifies security settings for a container
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # service.type -- service type
+  type: ClusterIP
+  # service.port -- service port
+  port: 80
+  # service.annotations -- service annotations
+  annotations: {}
+    # app.k8s.io: gradle-cache
+    # example.kubernetes.io/internal: gradle.internal
+
+ingress:
+  # ingress.enabled -- enables Ingress for gradle-cache
+  enabled: false
+  # ingress.annotations -- ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: gradle-cache
+    # kubernetes.io/tls-acme: "true"
+  # ingress.hosts -- ingress accepted hostnames
+  hosts: []
+  #  - host: chart-example.local
+  #    paths: []
+  # ingress.tls -- ingress TLS configuration
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+  # ingress.ingressClassName -- ingress name of the IngressClass cluster resource
+  ingressClassName: ""
+
+# resources -- custom resource configuration
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# nodeSelector -- node for scheduler pod assignment
+nodeSelector: {}
+
+# tolerations -- tolerations for scheduler pod assignment
+tolerations: []
+
+# affinity -- affinity for scheduler pod assignment
+affinity: {}
+
+# volumes -- volumes
+volumes:
+   - name: cache
+     emptyDir: {}
+
+livenessProbe:
+  httpGet:
+    # livenessProbe.httpGet.path -- path for liveness probe
+    path: /
+    # livenessProbe.httpGet.port -- port for liveness probe
+    port: http
+
+readinessProbe:
+  httpGet:
+    # readinessProbe.httpGet.path -- path for readiness probe
+    path: /
+    # readinessProbe.httpGet.port -- port for readiness probe
+    port: http
+
+# env -- additional environment variables for the deployment
+env: []
+  # - name: SAMPLE
+  #   value: text
