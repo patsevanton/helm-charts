@@ -1,6 +1,6 @@
 # Helm charts for Kubernetes
 
-- Gradle build cache node
+- gradle-cache
 
 ## How to install
 
