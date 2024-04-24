@@ -1,0 +1,16 @@
+apiVersion: v1
+entries:
+  gradle-cache:
+  - apiVersion: v2
+    appVersion: "11.0"
+    created: "2024-04-24T06:45:20.134340164Z"
+    description: Helm chart to deploy [gradle-cache](https://docs.gradle.com/build-cache-node/).
+    digest: 0aa9bdec91d69f78cd19125b6851e91473aa21c3c3e6406413b0304742ffb7b2
+    home: https://github.com/patsevanton/helm-charts/tree/master/charts/gradle-cache
+    icon: https://gradle.org/icon/favicon-32x32.png
+    name: gradle-cache
+    type: application
+    urls:
+    - https://github.com/patsevanton/helm-charts/releases/download/gradle-cache-0.2.0/gradle-cache-0.2.0.tgz
+    version: 0.2.0
+generated: "2024-04-24T06:45:20.134349762Z"
